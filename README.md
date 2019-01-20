@@ -1,2 +1,36 @@
-# sequel
-How to Squirrel
+# SQL - Sequel or sometimes pronounced Squirrel
+
+This is a beginners guide to Structured Query Language (SQL) *- Not to be confused with MS-SQL (Microsoft SQL Server)*
+
+> SQL is the Query language used most often when interacting with relational databases.
+
+In this tutorial we will be looking at: 
+- how to create and design a simple database
+- interacting with a relational database using SQL
+- what is an ORM and how to use it
+- **BONUS** - caching my data using an in-memory data structure store
+
+
+---
+
+## My timesheet
+
+We will be creating a simple timesheet app to demonstrate relation data.
+
+Consider the following data to be captured:
+> - Name
+> - Surname
+> - Project
+> - Date
+> - Time start
+> - Time end
+> - Duration
+> - Description
+> - Billable (true/false)
+
+*A table structure for that **could** be...*
+
+Name | Surname | Client | Project | Date | Time Started | Time ended | Duration | Description | Billable
+--- | --- | --- | --- | --- | --- | --- | --- | --- | ---
+John | Doe | Client1 | Website | 2019-01-22 | 09:00 | 11:00 | 120 | I was rocking HTML5  | YES
+
