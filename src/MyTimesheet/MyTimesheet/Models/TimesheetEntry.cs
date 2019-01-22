@@ -14,6 +14,7 @@ namespace MyTimesheet.Models
            John | Doe | Client X | API | 2019-01-22 | 13:00 | 17:00 | 240 | Grafting on golang api  | YES
          */
 
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
         public string Client { get; set; }
