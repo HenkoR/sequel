@@ -44,3 +44,10 @@ John | Doe | Client X | API | 2019-01-22 | 13:00 | 17:00 | 240 | Grafting on gol
 5. Add Redis connection to project ([Example](https://docs.microsoft.com/en-us/azure/azure-cache-for-redis/cache-web-app-howto))
 6. Save some data into Redis
 7. Read some data from Redis
+
+### Side quests
+
+- Normalize the Data structure
+- Create a second migration to change your database into the normalized form
+- Implement a "save" to redis on the PUT and POST endpoints
+- Implement a try-read from redis on your GET calls (Try to read from redis, if key does not exists read from DB)
