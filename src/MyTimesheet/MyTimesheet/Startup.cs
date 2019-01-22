@@ -35,7 +35,7 @@ namespace MyTimesheet
                 c.SwaggerDoc("v1", new Info { Title = "My Timesheet API", Version = "v1" });
             });
 
-            var connection = @"Server=sql101labs1793591179000.westeurope.cloudapp.azure.com;Database=sql101.#chuba.moganedi;User Id=chubamoganedi;Password=rabbit123!@#;";
+            var connection = @"Server=sql101labs1793591179000.westeurope.cloudapp.azure.com;Database=sql101.chuba.moganedi;User Id=chubamoganedi;Password=rabbit123!@#;";
             services.AddDbContext<TimesheetContext>
                 (options => options.UseSqlServer(connection));
         }
