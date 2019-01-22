@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using MyTimesheet.Models;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace MyTimesheet
@@ -32,6 +34,10 @@ namespace MyTimesheet
             {
                 c.SwaggerDoc("v1", new Info { Title = "My Timesheet API", Version = "v1" });
             });
+
+            var connection = @"Server=myServerAddress;Database=sql101.#NAME.SURNAME;User Id=myUsername;Password=myPassword;";
+            services.AddDbContext<TimesheetContext>
+                (options => options.UseSqlServer(connection));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
