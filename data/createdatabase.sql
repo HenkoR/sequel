@@ -1,115 +1,115 @@
 USE [master]
 GO
 
-/****** Object:  Database [sql101.firstname.lastname]    Script Date: 1/21/2019 9:11:50 PM ******/
-CREATE DATABASE [sql101.firstname.lastname]
+/****** Object:  Database [sql101.simtembile.soginga]    Script Date: 1/21/2019 9:11:50 PM ******/
+CREATE DATABASE [sql101.simtembile.soginga]
  CONTAINMENT = NONE
  ON  PRIMARY 
-( NAME = N'sql101.firstname.lastname', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA\sql101.firstname.lastname.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
+( NAME = N'sql101.simtembile.soginga', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA\sql101.simtembile.soginga.mdf' , SIZE = 8192KB , MAXSIZE = UNLIMITED, FILEGROWTH = 65536KB )
  LOG ON 
-( NAME = N'sql101.firstname.lastname_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA\sql101.firstname.lastname_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
+( NAME = N'sql101.simtembile.soginga_log', FILENAME = N'C:\Program Files\Microsoft SQL Server\MSSQL13.MSSQLSERVER\MSSQL\DATA\sql101.simtembile.soginga_log.ldf' , SIZE = 8192KB , MAXSIZE = 2048GB , FILEGROWTH = 65536KB )
 GO
 
-ALTER DATABASE [sql101.firstname.lastname] SET COMPATIBILITY_LEVEL = 130
+ALTER DATABASE [sql101.simtembile.soginga] SET COMPATIBILITY_LEVEL = 130
 GO
 
 IF (1 = FULLTEXTSERVICEPROPERTY('IsFullTextInstalled'))
 begin
-EXEC [sql101.firstname.lastname].[dbo].[sp_fulltext_database] @action = 'enable'
+EXEC [sql101.simtembile.soginga].[dbo].[sp_fulltext_database] @action = 'enable'
 end
 GO
 
-ALTER DATABASE [sql101.firstname.lastname] SET ANSI_NULL_DEFAULT OFF 
+ALTER DATABASE [sql101.simtembile.soginga] SET ANSI_NULL_DEFAULT OFF 
 GO
 
-ALTER DATABASE [sql101.firstname.lastname] SET ANSI_NULLS OFF 
+ALTER DATABASE [sql101.simtembile.soginga] SET ANSI_NULLS OFF 
 GO
 
-ALTER DATABASE [sql101.firstname.lastname] SET ANSI_PADDING OFF 
+ALTER DATABASE [sql101.simtembile.soginga] SET ANSI_PADDING OFF 
 GO
 
-ALTER DATABASE [sql101.firstname.lastname] SET ANSI_WARNINGS OFF 
+ALTER DATABASE [sql101.simtembile.soginga] SET ANSI_WARNINGS OFF 
 GO
 
-ALTER DATABASE [sql101.firstname.lastname] SET ARITHABORT OFF 
+ALTER DATABASE [sql101.simtembile.soginga] SET ARITHABORT OFF 
 GO
 
-ALTER DATABASE [sql101.firstname.lastname] SET AUTO_CLOSE OFF 
+ALTER DATABASE [sql101.simtembile.soginga] SET AUTO_CLOSE OFF 
 GO
 
-ALTER DATABASE [sql101.firstname.lastname] SET AUTO_SHRINK OFF 
+ALTER DATABASE [sql101.simtembile.soginga] SET AUTO_SHRINK OFF 
 GO
 
-ALTER DATABASE [sql101.firstname.lastname] SET AUTO_UPDATE_STATISTICS ON 
+ALTER DATABASE [sql101.simtembile.soginga] SET AUTO_UPDATE_STATISTICS ON 
 GO
 
-ALTER DATABASE [sql101.firstname.lastname] SET CURSOR_CLOSE_ON_COMMIT OFF 
+ALTER DATABASE [sql101.simtembile.soginga] SET CURSOR_CLOSE_ON_COMMIT OFF 
 GO
 
-ALTER DATABASE [sql101.firstname.lastname] SET CURSOR_DEFAULT  GLOBAL 
+ALTER DATABASE [sql101.simtembile.soginga] SET CURSOR_DEFAULT  GLOBAL 
 GO
 
-ALTER DATABASE [sql101.firstname.lastname] SET CONCAT_NULL_YIELDS_NULL OFF 
+ALTER DATABASE [sql101.simtembile.soginga] SET CONCAT_NULL_YIELDS_NULL OFF 
 GO
 
-ALTER DATABASE [sql101.firstname.lastname] SET NUMERIC_ROUNDABORT OFF 
+ALTER DATABASE [sql101.simtembile.soginga] SET NUMERIC_ROUNDABORT OFF 
 GO
 
-ALTER DATABASE [sql101.firstname.lastname] SET QUOTED_IDENTIFIER OFF 
+ALTER DATABASE [sql101.simtembile.soginga] SET QUOTED_IDENTIFIER OFF 
 GO
 
-ALTER DATABASE [sql101.firstname.lastname] SET RECURSIVE_TRIGGERS OFF 
+ALTER DATABASE [sql101.simtembile.soginga] SET RECURSIVE_TRIGGERS OFF 
 GO
 
-ALTER DATABASE [sql101.firstname.lastname] SET  DISABLE_BROKER 
+ALTER DATABASE [sql101.simtembile.soginga] SET  DISABLE_BROKER 
 GO
 
-ALTER DATABASE [sql101.firstname.lastname] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
+ALTER DATABASE [sql101.simtembile.soginga] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
 GO
 
-ALTER DATABASE [sql101.firstname.lastname] SET DATE_CORRELATION_OPTIMIZATION OFF 
+ALTER DATABASE [sql101.simtembile.soginga] SET DATE_CORRELATION_OPTIMIZATION OFF 
 GO
 
-ALTER DATABASE [sql101.firstname.lastname] SET TRUSTWORTHY OFF 
+ALTER DATABASE [sql101.simtembile.soginga] SET TRUSTWORTHY OFF 
 GO
 
-ALTER DATABASE [sql101.firstname.lastname] SET ALLOW_SNAPSHOT_ISOLATION OFF 
+ALTER DATABASE [sql101.simtembile.soginga] SET ALLOW_SNAPSHOT_ISOLATION OFF 
 GO
 
-ALTER DATABASE [sql101.firstname.lastname] SET PARAMETERIZATION SIMPLE 
+ALTER DATABASE [sql101.simtembile.soginga] SET PARAMETERIZATION SIMPLE 
 GO
 
-ALTER DATABASE [sql101.firstname.lastname] SET READ_COMMITTED_SNAPSHOT OFF 
+ALTER DATABASE [sql101.simtembile.soginga] SET READ_COMMITTED_SNAPSHOT OFF 
 GO
 
-ALTER DATABASE [sql101.firstname.lastname] SET HONOR_BROKER_PRIORITY OFF 
+ALTER DATABASE [sql101.simtembile.soginga] SET HONOR_BROKER_PRIORITY OFF 
 GO
 
-ALTER DATABASE [sql101.firstname.lastname] SET RECOVERY FULL 
+ALTER DATABASE [sql101.simtembile.soginga] SET RECOVERY FULL 
 GO
 
-ALTER DATABASE [sql101.firstname.lastname] SET  MULTI_USER 
+ALTER DATABASE [sql101.simtembile.soginga] SET  MULTI_USER 
 GO
 
-ALTER DATABASE [sql101.firstname.lastname] SET PAGE_VERIFY CHECKSUM  
+ALTER DATABASE [sql101.simtembile.soginga] SET PAGE_VERIFY CHECKSUM  
 GO
 
-ALTER DATABASE [sql101.firstname.lastname] SET DB_CHAINING OFF 
+ALTER DATABASE [sql101.simtembile.soginga] SET DB_CHAINING OFF 
 GO
 
-ALTER DATABASE [sql101.firstname.lastname] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
+ALTER DATABASE [sql101.simtembile.soginga] SET FILESTREAM( NON_TRANSACTED_ACCESS = OFF ) 
 GO
 
-ALTER DATABASE [sql101.firstname.lastname] SET TARGET_RECOVERY_TIME = 60 SECONDS 
+ALTER DATABASE [sql101.simtembile.soginga] SET TARGET_RECOVERY_TIME = 60 SECONDS 
 GO
 
-ALTER DATABASE [sql101.firstname.lastname] SET DELAYED_DURABILITY = DISABLED 
+ALTER DATABASE [sql101.simtembile.soginga] SET DELAYED_DURABILITY = DISABLED 
 GO
 
-ALTER DATABASE [sql101.firstname.lastname] SET QUERY_STORE = OFF
+ALTER DATABASE [sql101.simtembile.soginga] SET QUERY_STORE = OFF
 GO
 
-USE [sql101.firstname.lastname]
+USE [sql101.simtembile.soginga]
 GO
 
 ALTER DATABASE SCOPED CONFIGURATION SET LEGACY_CARDINALITY_ESTIMATION = OFF;
@@ -124,7 +124,7 @@ GO
 ALTER DATABASE SCOPED CONFIGURATION SET QUERY_OPTIMIZER_HOTFIXES = OFF;
 GO
 
-ALTER DATABASE [sql101.firstname.lastname] SET  READ_WRITE 
+ALTER DATABASE [sql101.simtembile.soginga] SET  READ_WRITE 
 GO
 
 
