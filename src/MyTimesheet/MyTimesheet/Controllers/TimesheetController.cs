@@ -20,6 +20,7 @@ namespace MyTimesheet.Controllers
 
         // GET api/values
         [HttpGet]
+
         public async Task<ActionResult<IEnumerable<TimesheetEntry>>> Get()
         {
             return await _db.Entries.ToListAsync();
