@@ -24,9 +24,33 @@ namespace MyTimesheet.Controllers
 
         // GET api/values
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TimesheetEntry>>> Get()
+        public async Task<ActionResult<string>> Get()
         {
-            return await _db.Entries.ToListAsync();
+            
+            var cacheConnection = _config.GetValue<string>("CacheConnection").ToString();
+            var lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
+            {
+                return ConnectionMultiplexer.Connect(cacheConnection);
+            });
+
+            IDatabase cache = lazyConnection.Value.GetDatabase();
+
+            var cacheItem = cache.Execute("KEYS","LIST").ToString();
+            
+            lazyConnection.Value.Dispose();
+
+            var entries = await _db.Entries.ToListAsync();
+
+            if (cacheItem == null)
+            {
+
+                return  entries.ToString();
+            }
+            else
+            {
+                return cacheItem;
+            }
+            //return await _db.Entries.ToListAsync();
         }
 
         // GET api/values/5
@@ -50,9 +74,9 @@ namespace MyTimesheet.Controllers
             });
 
             IDatabase cache = lazyConnection.Value.GetDatabase();
-            await cache.StringSetAsync($"{value.Name}-{value.Surname}", value.ToString());
+            await cache.StringSetAsync($"{value.EntryId}", value.ToString());
 
-            var cacheItem = await cache.StringGetAsync($"{value.Name}-{value.Surname}");
+            var cacheItem = await cache.StringGetAsync($"{value.EntryId}");
 
             lazyConnection.Value.Dispose();
 
