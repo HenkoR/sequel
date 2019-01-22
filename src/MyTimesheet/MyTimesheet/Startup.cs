@@ -39,6 +39,7 @@ namespace MyTimesheet
 
             services.AddDbContext<TimesheetContext>
                 (options => options.UseSqlServer(connection));
+            services.AddSingleton(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
