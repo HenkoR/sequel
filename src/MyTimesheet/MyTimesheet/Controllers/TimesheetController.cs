@@ -35,7 +35,7 @@ namespace MyTimesheet.Controllers
             });
 
             IDatabase cache = lazyConnection.Value.GetDatabase();
-            
+
             var cacheItem = cache.Execute("KEYS", "LIST").ToString();
 
 
@@ -58,13 +58,13 @@ namespace MyTimesheet.Controllers
         {
             await _db.Entries.AddAsync(value);
             await _db.SaveChangesAsync();
-            
+
             var cacheConnection = _config.GetValue<string>("CacheConnection").ToString();
             var lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
             {
                 return ConnectionMultiplexer.Connect(cacheConnection);
             });
-            
+
             IDatabase cache = lazyConnection.Value.GetDatabase();
             await cache.StringSetAsync($"{value.Name}-{value.Surname}", value.ToString());
 
@@ -73,7 +73,7 @@ namespace MyTimesheet.Controllers
 
 
             lazyConnection.Value.Dispose();
-            
+
             return cacheItem;
 
         }
