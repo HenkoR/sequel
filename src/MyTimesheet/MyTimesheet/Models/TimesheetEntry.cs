@@ -13,11 +13,16 @@ namespace MyTimesheet.Models
            John | Doe | Client X | Website | 2019-01-22 | 09:00 | 11:00 | 120 | I was rocking HTML5  | YES
            John | Doe | Client X | API | 2019-01-22 | 13:00 | 17:00 | 240 | Grafting on golang api  | YES
          */
+        /*
+         * EmployeeID | ClientID | Project | Date | Time Started | Time ended | Duration | Description | Billable
+          --         | --        | --- | --- | --- | --- | --- | --- | ---
+               0     |     0     | Website | 2019-01-22 | 09:00 | 11:00 | 120 | I was rocking HTML5  | YES
+               0     |     0     | API | 2019-01-22 | 13:00 | 17:00 | 240 | Grafting on golang api  | YES
+        */
 
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Surname { get; set; }
-        public string Client { get; set; }
+        public int EmployeeId { get; set; }
+        public string ClientId { get; set; }
         public string Project { get; set; }
         public DateTime Date { get; set; }
         public DateTime TimeStart { get; set; }
