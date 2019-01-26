@@ -15,9 +15,9 @@ namespace MyTimesheet.Controllers
     [ApiController]
     public class SessionController : ControllerBase
     {
-        private readonly TimesheetContext _db;
+        private readonly SessionContext _db;
         private readonly IConfiguration _configuration;
-        public SessionController(TimesheetContext context, IConfiguration config)
+        public SessionController(SessionContext context, IConfiguration config)
         {
             _db = context;
             _configuration = config;
@@ -25,23 +25,23 @@ namespace MyTimesheet.Controllers
 
         // GET api/values
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Session>>> Get()
+        public async Task<ActionResult<IEnumerable<SessionEntry>>> Get()
         {
-            return await _db.Sessions.ToListAsync();
+            return await _db.Entries.ToListAsync();
         }
 
         // GET api/values/5
         [HttpGet("{Session_Id}")]
-        public async Task<ActionResult<Session>> Get(int id)
+        public async Task<ActionResult<SessionEntry>> Get(int id)
         {
-            return await _db.Sessions.FindAsync(id);
+            return await _db.Entries.FindAsync(id);
         }
 
         // POST api/values
         [HttpPost]
-        public async Task<String> Post([FromBody] Session value)
+        public async Task<String> Post([FromBody] SessionEntry value)
         {
-            await _db.Sessions.AddAsync(value);
+            await _db.Entries.AddAsync(value);
             await _db.SaveChangesAsync();
 
             var cacheConnection = _configuration.GetValue<String>("CacheConnection").ToString();
@@ -61,9 +61,9 @@ namespace MyTimesheet.Controllers
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public async Task Put(int id, [FromBody] Session value)
+        public async Task Put(int id, [FromBody] SessionEntry value)
         {
-            var entry = await _db.Sessions.FindAsync(id);
+            var entry = await _db.Entries.FindAsync(id);
             entry = value;
             await _db.SaveChangesAsync();
         }
