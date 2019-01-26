@@ -27,16 +27,48 @@ namespace MyTimesheet.Controllers
         // GET api/values
         [HttpGet]
 
-        public async Task<ActionResult<IEnumerable<TimesheetEntry>>> Get()
+        public async Task<ActionResult<String>> Get()
         {
-            return await _db.Entries.ToListAsync();
+            var lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
+            {
+                string cacheConnection = _config.GetValue<string>("CacheConnection").ToString();
+                return ConnectionMultiplexer.Connect(cacheConnection);
+            });
+
+            IDatabase cache = lazyConnection.Value.GetDatabase();
+
+            var cacheItem = cache.Execute("KEYS", "*");
+
+            if (cacheItem == null)
+            {
+                return (await _db.Entries.ToListAsync()).ToString();
+            }
+
+            return cacheItem.ToString();
+            
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TimesheetEntry>> Get(int id)
+        public async Task<ActionResult<string>> Get(int id)
         {
-            return await _db.Entries.FindAsync(id);
+
+            var lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
+            {
+                string cacheConnection = _config.GetValue<string>("CacheConnection").ToString();
+                return ConnectionMultiplexer.Connect(cacheConnection);
+            });
+
+            IDatabase cache = lazyConnection.Value.GetDatabase();
+
+            var cacheItem = await cache.StringGetAsync(id.ToString());
+
+            if(cacheItem.IsNull)
+            {
+                return JsonConvert.SerializeObject(await _db.Entries.FindAsync(id)).ToString();
+            }
+
+            return cacheItem.ToString();
         }
 
         // POST api/values
@@ -56,24 +88,18 @@ namespace MyTimesheet.Controllers
 
             IDatabase cache = lazyConnection.Value.GetDatabase() ;
 
-
-
-
-
             TimesheetEntry results = _db.Entries.Include(v => v.Employee).Include(c => c.Project).Include(v => v.Project.Client).FirstOrDefault(x => x.Id == value.Id);
 
+             await cache.StringSetAsync($"{value.Employee.Name}-{value.Employee.Surname}", JsonConvert.SerializeObject(results));
 
-            await cache.StringSetAsync(results.Id.ToString(), JsonConvert.SerializeObject(results));
-            // await cache.StringSetAsync($"{value.Employee.Name}-{value.Employee.Surname}", $"{{value.Employee.Name}-{value.Employee.Surname}");
+            var   cacheItem =  await cache.StringGetAsync($"{value.Employee.Name}-{value.Employee.Surname}");
 
-            var   cacheItem =  await cache.StringGetAsync(results.Id.ToString());
+             
+           
+              lazyConnection.Value.Dispose();
+            
 
-          //  var cacheItem = cache.ExecuteAsync("KEYS *").ToString();
-
-            //var cacheItem = ya;
-         //   lazyConnection.Value.Dispose();
-
-            return cacheItem.ToString();
+           return cacheItem.ToString();
 
     }
   
@@ -82,8 +108,18 @@ namespace MyTimesheet.Controllers
     public async Task Put(int id, [FromBody] TimesheetEntry value)
     {
         var entry = await _db.Entries.FindAsync(id);
-        entry = value;
+        entry = value; 
         await _db.SaveChangesAsync();
+
+        var lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
+        {
+            string cacheConnection = _config.GetValue<string>("CacheConnection").ToString();
+            return ConnectionMultiplexer.Connect(cacheConnection);
+        });
+
+        IDatabase cache = lazyConnection.Value.GetDatabase();
+        await cache.StringSetAsync($"{value.Employee.Name}-{value.Employee.Surname}", JsonConvert.SerializeObject(entry));
+
     }
 
     // DELETE api/values/5
