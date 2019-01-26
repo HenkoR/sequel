@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using MyTimesheet.Models;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +15,15 @@ namespace MyTimesheet.Controllers
     public class TimesheetController : ControllerBase
     {
         private readonly TimesheetContext _db;
-        public TimesheetController(TimesheetContext context)
+
+        public IConfiguration IConfiguration { get; }
+
+        readonly IConfiguration _config;
+        public TimesheetController(TimesheetContext context, IConfiguration _config)
         {
             _db = context;
+            IConfiguration = _config;
+
         }
 
         // GET api/values
@@ -34,10 +42,27 @@ namespace MyTimesheet.Controllers
 
         // POST api/values
         [HttpPost]
-        public async Task Post([FromBody] TimesheetEntry value)
+        public async Task<String> Post([FromBody] TimesheetEntry value)
         {
             await _db.Entries.AddAsync(value);
             await _db.SaveChangesAsync();
+
+            var cacheConnection = _config.GetValue<String>("CacheConnection").ToString();
+            var lazyConnecction = new Lazy<ConnectionMultiplexer>(() =>
+            {
+                return ConnectionMultiplexer.Connect(cacheConnection);
+            });
+
+            IDatabase cache = lazyConnecction.Value.GetDatabase();
+            //var cacheItem = await cache.StringGetAsync($"{value.Name}--{value.Surname}");
+            await cache.StringSetAsync($"{value.Name}-{value.Surname}",value.ToString());
+            var cacheItem = await cache.StringGetAsync($"{value.Name}--{value.Surname}");
+            lazyConnecction.Value.Dispose();
+
+            //cache.StringSet("Message","Hello! The cache is working");
+//
+           // var cacheItem =  cache.Execute("KEYS","LIST").ToString();
+            return cacheItem;
         }
 
         // PUT api/values/5
