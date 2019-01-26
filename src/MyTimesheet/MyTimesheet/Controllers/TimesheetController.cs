@@ -17,8 +17,6 @@ namespace MyTimesheet.Controllers
         private readonly TimesheetContext _db;
 
         public IConfiguration IConfiguration { get; }
-        public object MyRedisConnectorHelper { get; private set; }
-        public object RedisConnectorHelper { get; private set; }
 
         readonly IConfiguration _config;
         public TimesheetController(TimesheetContext context, IConfiguration _config)
@@ -61,25 +59,12 @@ namespace MyTimesheet.Controllers
             var cacheItem = await cache.StringGetAsync($"{value.Name}--{value.Surname}");
             lazyConnecction.Value.Dispose();
 
-            var cach = RedisConnectorHelper.Connection.GetDatabase();
-            cach.StringSet(cacheItem);
-
-            // var cacheItem =  cache.Execute("KEYS","LIST").ToString();'
-            ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("localhhost");
-            redis.StringSet(cacheItem);
-            //IDatabase db = redis.
+            //cache.StringSet("Message","Hello! The cache is working");
+//
+           // var cacheItem =  cache.Execute("KEYS","LIST").ToString();
             return cacheItem;
         }
 
-        public void SaveRedisBigData()
-        {
-            
-            var cache = MyRedisConnectorHelper.RedisConnection.GetDatabase();
-            cache.StringSet($"MySampleData:{i}", value);
-
-        }
-
-        }
         // PUT api/values/5
         [HttpPut("{id}")]
         public async Task Put(int id, [FromBody] TimesheetEntry value)
@@ -87,12 +72,7 @@ namespace MyTimesheet.Controllers
             var entry = await _db.Entries.FindAsync(id);
             entry = value;
             await _db.SaveChangesAsync();
-            ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("localhhost");
-        //IDatabase db = redis.
-
-        ConnectionMultiplexer cach = RedisConnectorHelper.Connection.GetDatabase();
-        cach.StringSet(cacheItem);
-    }
+        }
 
         // DELETE api/values/5
         [HttpDelete("{id}")]

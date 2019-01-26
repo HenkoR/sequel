@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -42,19 +44,21 @@ namespace MyTimesheet.Models
         */
 
 
+        [Key]
+        public int Timesheet_ID { get; set; }
+        [ForeignKey("Cient")]
+        public int Client_ID { get; set; }
+        public bool Billable { get; set; }
+        [ForeignKey("Project")]
+        public int Project_ID { get; set; }
+        public DateTime Date { get; set; }
+        public DateTime TimeStart { get; set; }
+        public DateTime TimeEnd { get; set; }
+        public int Dev_ID { get; set; }
+        public string Name { get; set; }
+        public string Surname { get; set; }
+        public string Description { get; set; }
 
-        public int Id { get; set; }
-         public string Name { get; set; }
-         public string Surname { get; set; }
-         public string Client { get; set; }
-         public string Project { get; set; }
-         public DateTime Date { get; set; }
-         public DateTime TimeStart { get; set; }
-         public DateTime TimeEnd { get; set; }
-         public int Duration { get; set; }
-         public string Description { get; set; }
-         public bool Billable { get; set; }
-     
     }
 }
  
