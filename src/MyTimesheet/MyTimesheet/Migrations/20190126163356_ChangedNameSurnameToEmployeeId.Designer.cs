@@ -3,36 +3,23 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyTimesheet.Models;
 
 namespace MyTimesheet.Migrations
 {
     [DbContext(typeof(TimesheetContext))]
-    partial class TimesheetContextModelSnapshot : ModelSnapshot
+    [Migration("20190126163356_ChangedNameSurnameToEmployeeId")]
+    partial class ChangedNameSurnameToEmployeeId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.2.1-servicing-10028")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("MyTimesheet.Models.Employee", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("Name");
-
-                    b.Property<int>("Surname");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Employee");
-                });
 
             modelBuilder.Entity("MyTimesheet.Models.TimesheetEntry", b =>
                 {
@@ -50,7 +37,7 @@ namespace MyTimesheet.Migrations
 
                     b.Property<int>("Duration");
 
-                    b.Property<int>("EmployeeId");
+                    b.Property<string>("EmployeeId");
 
                     b.Property<string>("Project");
 
@@ -60,17 +47,7 @@ namespace MyTimesheet.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployeeId");
-
                     b.ToTable("Entries");
-                });
-
-            modelBuilder.Entity("MyTimesheet.Models.TimesheetEntry", b =>
-                {
-                    b.HasOne("MyTimesheet.Models.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }
