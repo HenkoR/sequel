@@ -10,7 +10,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using MyTimesheet.Interfaces;
 using MyTimesheet.Models;
+using MyTimesheet.Providers;
 using Swashbuckle.AspNetCore.Swagger;
 
 namespace MyTimesheet
@@ -35,9 +37,11 @@ namespace MyTimesheet
                 c.SwaggerDoc("v1", new Info { Title = "My Timesheet API", Version = "v1" });
             });
 
-            var connection = @"Server=sql101labs1793591179000.westeurope.cloudapp.azure.com;Database=sql101.#NAME.SURNAME;User Id=myUsername;Password=myPassword;";
+            var connection = @"Server=sql101labs1793591179000.westeurope.cloudapp.azure.com;Database=sql101.ilze.lourens;User Id=ilzelourens;Password=19970219aB@;";
             services.AddDbContext<TimesheetContext>
                 (options => options.UseSqlServer(connection));
+            services.AddScoped<RediProviderInterface, RedisProvider>();
+            services.AddSingleton(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
