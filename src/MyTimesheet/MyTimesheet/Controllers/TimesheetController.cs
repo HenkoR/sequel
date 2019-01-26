@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using MyTimesheet.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Configuration;
+using StackExchange.Redis;
+
 
 namespace MyTimesheet.Controllers
 {
@@ -13,9 +17,11 @@ namespace MyTimesheet.Controllers
     public class TimesheetController : ControllerBase
     {
         private readonly TimesheetContext _db;
-        public TimesheetController(TimesheetContext context)
+        readonly IConfiguration _config;
+        public TimesheetController(TimesheetContext context, IConfiguration config)
         {
             _db = context;
+            _config = config;
         }
 
         // GET api/values
@@ -34,10 +40,25 @@ namespace MyTimesheet.Controllers
 
         // POST api/values
         [HttpPost]
-        public async Task Post([FromBody] TimesheetEntry value)
+        public async Task<String> Post([FromBody] TimesheetEntry value)
         {
             await _db.Entries.AddAsync(value);
             await _db.SaveChangesAsync();
+
+            var cacheConnection = _config.GetValue<String>("CacheConnection").ToString();
+            var lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
+            {
+                return ConnectionMultiplexer.Connect(cacheConnection);
+            });
+            IDatabase cache = lazyConnection.Value.GetDatabase();
+            await cache.StringGetAsync($"{value.Id}");
+
+            var cacheItem = await cache.StringGetAsync($"{value.Id}");
+
+            lazyConnection.Value.Dispose();
+
+            return cacheItem;
+
         }
 
         // PUT api/values/5
@@ -47,6 +68,21 @@ namespace MyTimesheet.Controllers
             var entry = await _db.Entries.FindAsync(id);
             entry = value;
             await _db.SaveChangesAsync();
+            var cacheConnection = _config.GetValue<String>("CacheConnection").ToString();
+
+            var lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
+            {
+
+                return ConnectionMultiplexer.Connect(cacheConnection);
+            });
+
+            IDatabase cache = lazyConnection.Value.GetDatabase();
+            await cache.StringSetAsync($"{value.Id}", value.ToString());
+
+            var cacheItem = await cache.StringGetAsync($"{value.Id}");
+           
+            lazyConnection.Value.Dispose();
+
         }
 
         // DELETE api/values/5
@@ -59,3 +95,4 @@ namespace MyTimesheet.Controllers
         }
     }
 }
+    
