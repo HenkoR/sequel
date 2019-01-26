@@ -5,6 +5,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using StackExchange.Redis;
 
 namespace MyTimesheet.Controllers
 {
@@ -13,9 +15,11 @@ namespace MyTimesheet.Controllers
     public class TimesheetController : ControllerBase
     {
         private readonly TimesheetContext _db;
-        public TimesheetController(TimesheetContext context)
+        private IConfiguration _config;
+        public TimesheetController(TimesheetContext context, IConfiguration configuration)
         {
             _db = context;
+            _config = configuration;
         }
 
         // GET api/values
@@ -34,10 +38,36 @@ namespace MyTimesheet.Controllers
 
         // POST api/values
         [HttpPost]
-        public async Task Post([FromBody] TimesheetEntry value)
+        public async Task<RedisValue> Post([FromBody] TimesheetEntry value)
         {
             await _db.Entries.AddAsync(value);
             await _db.SaveChangesAsync();
+
+            var cacheConnection = _config.GetValue<string>("CacheConnection").ToString();
+            var lazyConnection = new Lazy<ConnectionMultiplexer>(() => //connecting to our redis
+            {
+    
+                return ConnectionMultiplexer.Connect(cacheConnection);
+            });
+
+            IDatabase cache = lazyConnection.Value.GetDatabase();
+            //await cache.StringSetAsync($"{value.Name}-{value.Surname}", value.ToString()); //Adding to cache using this key
+
+            //var cacheItem= await cache.StringGetAsync($"{value.Name}-{value.Surname}".ToString());//Reads the value
+
+
+            //return cacheItem;
+
+            //List of people in our cache, remember cache lies in memory
+            var cacheItem = cache.Execute("KEYS", "LIST").ToString();
+
+            //var cacheItem = cache.Execute("KEYS", "*").ToString();
+
+            lazyConnection.Value.Dispose();
+
+            return cacheItem;
+
+            //Never store in the redis, because the stuff can get lost. not persstent. but there exists tools to make it persistent
         }
 
         // PUT api/values/5
