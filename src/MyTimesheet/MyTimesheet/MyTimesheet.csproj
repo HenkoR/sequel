@@ -6,6 +6,21 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20190126085457_testing.cs" />
+    <Compile Remove="Migrations\20190126085457_testing.Designer.cs" />
+    <Compile Remove="Migrations\20190126090953_testing.cs" />
+    <Compile Remove="Migrations\20190126090953_testing.Designer.cs" />
+    <Compile Remove="Migrations\20190126092025_testing.cs" />
+    <Compile Remove="Migrations\20190126092025_testing.Designer.cs" />
+    <Compile Remove="Migrations\20190126092150_testing.cs" />
+    <Compile Remove="Migrations\20190126092150_testing.Designer.cs" />
+    <Compile Remove="Migrations\20190126092559_onetwo.cs" />
+    <Compile Remove="Migrations\20190126092559_onetwo.Designer.cs" />
+    <Compile Remove="Migrations\20190126092828_onetwo.cs" />
+    <Compile Remove="Migrations\20190126092828_onetwo.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.2.1" />

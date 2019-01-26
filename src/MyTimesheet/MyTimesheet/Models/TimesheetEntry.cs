@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -8,22 +9,20 @@ namespace MyTimesheet.Models
     public class TimesheetEntry
     {
         /*
-           Name | Surname | Client | Project | Date | Time Started | Time ended | Duration | Description | Billable
-           --- | --- | --- | --- | --- | --- | --- | --- | --- | ---
-           John | Doe | Client X | Website | 2019-01-22 | 09:00 | 11:00 | 120 | I was rocking HTML5  | YES
-           John | Doe | Client X | API | 2019-01-22 | 13:00 | 17:00 | 240 | Grafting on golang api  | YES
+           DeveloperId    | Client   | ProjectId | Date       
+           -------------- | -------- | -------   | ---------- | 
+           DEV1233434     | Client X | PR21      | 2019-01-22 |
+           DEV0133534     | Client X | PR05      | 2019-01-22 | 
          */
 
+        
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Surname { get; set; }
+        
+        public Developer Developer { get; set; }
+        
+        public Project Project { get; set; }
         public string Client { get; set; }
-        public string Project { get; set; }
         public DateTime Date { get; set; }
-        public DateTime TimeStart { get; set; }
-        public DateTime TimeEnd { get; set; }
-        public int Duration { get; set; }
-        public string Description { get; set; }
-        public bool Billable { get; set; }
+        
     }
 }
