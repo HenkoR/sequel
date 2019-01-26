@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MyTimesheet.Models;
-using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,59 +11,59 @@ namespace MyTimesheet.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TimesheetController : ControllerBase
+    public class ClientController : ControllerBase
     {
         private readonly TimesheetContext _db;
-        readonly IConfiguration _config;
-        public TimesheetController(TimesheetContext context,IConfiguration config)
+        
+        public ClientController(TimesheetContext context)
         {
             _db = context;
-            _config = config;
+
         }
 
         // GET api/values
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TimesheetEntry>>> Get()
+        public async Task<ActionResult<IEnumerable<Client>>> Get()
         {
-            return await _db.Entries.ToListAsync();
+            return await _db.ClientEntries.ToListAsync();
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TimesheetEntry>> Get(int id)
+        public async Task<ActionResult<Client>> Get(int id)
         {
-            return await _db.Entries.FindAsync(id);
+            return await _db.ClientEntries.FindAsync(id);
         }
 
         // POST api/values
         [HttpPost]
-        public async Task Post([FromBody] TimesheetEntry value)
+        public async Task Post([FromBody] Client value)
         {
-            await _db.Entries.AddAsync(value);
+            await _db.ClientEntries.AddAsync(value);
             await _db.SaveChangesAsync();
 
-           // var cacheConnection = _config.GetValue<string>("CacheConnection").ToString();
+            // var cacheConnection = _config.GetValue<string>("CacheConnection").ToString();
 
             //var lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
-//{
+            //{
             //return ConnectionMultiplexer.Connect(cacheConnection);
-       // });
-           // IDatabase cache = lazyConnection.Value.GetDatabase();
-           // await cache.StringSetAsync($"{value.Name}-{value.Surname}",value.ToString());
+            // });
+            // IDatabase cache = lazyConnection.Value.GetDatabase();
+            // await cache.StringSetAsync($"{value.Name}-{value.Surname}",value.ToString());
 
             //var cacheItem = await cache.StringGetAsync($"{value.Name}-{value.Surname}");
 
-           
-          //  lazyConnection.Value.Dispose();
-          //  return cacheItem;
+
+            //  lazyConnection.Value.Dispose();
+            //  return cacheItem;
 
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public async Task Put(int id, [FromBody] TimesheetEntry value)
+        public async Task Put(int id, [FromBody] Client value)
         {
-            var entry = await _db.Entries.FindAsync(id);
+            var entry = await _db.ClientEntries.FindAsync(id);
             entry = value;
             await _db.SaveChangesAsync();
         }
@@ -73,9 +72,11 @@ namespace MyTimesheet.Controllers
         [HttpDelete("{id}")]
         public async Task Delete(int id)
         {
-            var entry = await _db.Entries.FindAsync(id);
-            _db.Entries.Remove(entry);
+            var entry = await _db.ClientEntries.FindAsync(id);
+            _db.ClientEntries.Remove(entry);
             await _db.SaveChangesAsync();
         }
     }
+
+
 }
