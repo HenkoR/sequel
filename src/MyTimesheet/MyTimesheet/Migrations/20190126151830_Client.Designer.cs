@@ -10,8 +10,8 @@ using MyTimesheet.Models;
 namespace MyTimesheet.Migrations
 {
     [DbContext(typeof(TimesheetContext))]
-    [Migration("20190122091303_InitialMigrations")]
-    partial class InitialMigrations
+    [Migration("20190126151830_Client")]
+    partial class Client
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -29,7 +29,7 @@ namespace MyTimesheet.Migrations
 
                     b.Property<bool>("Billable");
 
-                    b.Property<string>("Client");
+                    b.Property<string>("ClientId");
 
                     b.Property<DateTime>("Date");
 
@@ -37,11 +37,9 @@ namespace MyTimesheet.Migrations
 
                     b.Property<int>("Duration");
 
-                    b.Property<string>("Name");
+                    b.Property<int>("EmployeeId");
 
                     b.Property<string>("Project");
-
-                    b.Property<string>("Surname");
 
                     b.Property<DateTime>("TimeEnd");
 

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace MyTimesheet.Migrations
 {
-    public partial class InitialMigrations : Migration
+    public partial class Client : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -14,9 +14,8 @@ namespace MyTimesheet.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn),
-                    Name = table.Column<string>(nullable: true),
-                    Surname = table.Column<string>(nullable: true),
-                    Client = table.Column<string>(nullable: true),
+                    EmployeeId = table.Column<int>(nullable: false),
+                    ClientId = table.Column<string>(nullable: true),
                     Project = table.Column<string>(nullable: true),
                     Date = table.Column<DateTime>(nullable: false),
                     TimeStart = table.Column<DateTime>(nullable: false),
