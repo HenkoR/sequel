@@ -1,6 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Protocols;
 using MyTimesheet.Models;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +15,17 @@ namespace MyTimesheet.Controllers
     [ApiController]
     public class TimesheetController : ControllerBase
     {
+        
         private readonly TimesheetContext _db;
-        public TimesheetController(TimesheetContext context)
+        readonly IConfiguration _config;
+
+        public IConfiguration Config => _config;
+
+        public TimesheetController(TimesheetContext context,IConfiguration _config)
         {
             _db = context;
+            this._config = _config;
+
         }
 
         // GET api/values
@@ -38,6 +48,19 @@ namespace MyTimesheet.Controllers
         {
             await _db.Entries.AddAsync(value);
             await _db.SaveChangesAsync();
+            var cacheConnection = Config.GetValue<String>("CacheConnection").ToString();
+               
+            var lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
+            {
+
+                return ConnectionMultiplexer.Connect(cacheConnection);
+            });
+            IDatabase cache = lazyConnection.Value.GetDatabase();
+            await cache.SetAddAsync($"{value.Name}--{value.Surname}",value.ToString());
+            //var cacheItem=await cache.StringGetAsync($"{value.Name}--{value.Surname}");
+            
+            var cacheitem=cache.Execute("KEYS","LIST").ToString();
+           // lazyConnection.Value.Dispose();
         }
 
         // PUT api/values/5
@@ -47,6 +70,11 @@ namespace MyTimesheet.Controllers
             var entry = await _db.Entries.FindAsync(id);
             entry = value;
             await _db.SaveChangesAsync();
+
+             ConnectionMultiplexer redis = ConnectionMultiplexer.Connect("localhost");
+             IDatabase data = redis.GetDatabase();
+                
+
         }
 
         // DELETE api/values/5
