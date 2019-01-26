@@ -33,6 +33,21 @@ namespace MyTimesheet.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<TimesheetEntry>> Get(int id)
         {
+            var cacheConnection = _config.GetValue<string>("CacheConnection").ToString();//That is the connection string
+            var lazyConnection = new Lazy<ConnectionMultiplexer>(() => //connecting to our Redis
+            {
+                //Connecting to Redis
+                return ConnectionMultiplexer.Connect(cacheConnection);
+            });
+
+            IDatabase cache = lazyConnection.Value.GetDatabase();//This is the connection to the Redis database
+
+            string key = Convert.ToString(id);
+            if (!cache.KeyExists(key))
+            {
+                return await _db.Entries.FindAsync(id);
+            }
+            else await cache.StringGetAsync(key);
             return await _db.Entries.FindAsync(id);
         }
 
@@ -43,31 +58,26 @@ namespace MyTimesheet.Controllers
             await _db.Entries.AddAsync(value);
             await _db.SaveChangesAsync();
 
-            var cacheConnection = _config.GetValue<string>("CacheConnection").ToString();
-            var lazyConnection = new Lazy<ConnectionMultiplexer>(() => //connecting to our redis
+            var cacheConnection = _config.GetValue<string>("CacheConnection").ToString();//That is the connection string
+            var lazyConnection = new Lazy<ConnectionMultiplexer>(() => //connecting to our Redis
             {
-    
+                //Connecting to Redis
                 return ConnectionMultiplexer.Connect(cacheConnection);
             });
 
-            IDatabase cache = lazyConnection.Value.GetDatabase();
-            //await cache.StringSetAsync($"{value.Name}-{value.Surname}", value.ToString()); //Adding to cache using this key
+            IDatabase cache = lazyConnection.Value.GetDatabase();//This is the connection to the Redis database
 
-            //var cacheItem= await cache.StringGetAsync($"{value.Name}-{value.Surname}".ToString());//Reads the value
-
-
-            //return cacheItem;
+            //Adding to cache using this key which is the ID and the values
+            string key = Convert.ToString(value.Id);
+            await cache.StringSetAsync(key,value.ToString());
+            await cache.KeyPersistAsync(key); //Creating peristence on the key, in order for it to always be saved on cache
 
             //List of people in our cache, remember cache lies in memory
-            var cacheItem = cache.Execute("KEYS", "LIST").ToString();
-
-            //var cacheItem = cache.Execute("KEYS", "*").ToString();
+            var cacheItem = cache.Execute("KEYS", "*").ToString();
 
             lazyConnection.Value.Dispose();
 
             return cacheItem;
-
-            //Never store in the redis, because the stuff can get lost. not persstent. but there exists tools to make it persistent
         }
 
         // PUT api/values/5
@@ -76,6 +86,20 @@ namespace MyTimesheet.Controllers
         {
             var entry = await _db.Entries.FindAsync(id);
             entry = value;
+
+            var cacheConnection = _config.GetValue<string>("CacheConnection").ToString();//That is the connection string
+            var lazyConnection = new Lazy<ConnectionMultiplexer>(() => //connecting to our Redis
+            {
+                //Connecting to Redis
+                return ConnectionMultiplexer.Connect(cacheConnection);
+            });
+
+            IDatabase cache = lazyConnection.Value.GetDatabase();//This is the connection to the Redis database
+
+            //Adding to cache using this key which is the ID and the values
+            string key = Convert.ToString(id);
+            await cache.StringSetAsync(key, value.ToString());
+            await cache.KeyPersistAsync(key); //Creating peristence on the key, in order for it to always be saved on cache
             await _db.SaveChangesAsync();
         }
 
