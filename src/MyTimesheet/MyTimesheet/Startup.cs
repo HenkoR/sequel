@@ -35,9 +35,10 @@ namespace MyTimesheet
                 c.SwaggerDoc("v1", new Info { Title = "My Timesheet API", Version = "v1" });
             });
 
-            var connection = @"Server=sql101labs1793591179000.westeurope.cloudapp.azure.com;Database=sql101.Fiwa.Lekhulani;User Id=FiwaLekhulani;Password=fiwa12345!;";
+            var connection = @"Server=sql101labs1793591179000.westeurope.cloudapp.azure.com;Database=sql101.Fiwa.Lekhulani;User Id=FiwaLekhulani;Password=fiwa1234!;";
             services.AddDbContext<TimesheetContext>
                 (options => options.UseSqlServer(connection));
+            services.AddSingleton(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -25,5 +25,6 @@ namespace MyTimesheet.Models
         public int Duration { get; set; }
         public string Description { get; set; }
         public bool Billable { get; set; }
+        public object EntryId { get; internal set; }
     }
 }

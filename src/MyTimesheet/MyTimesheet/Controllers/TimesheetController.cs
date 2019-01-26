@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using MyTimesheet.Models;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,17 +15,43 @@ namespace MyTimesheet.Controllers
     public class TimesheetController : ControllerBase
     {
         private readonly TimesheetContext _db;
-        public TimesheetController(TimesheetContext context)
+        readonly IConfiguration _config;
+        public TimesheetController(TimesheetContext context, IConfiguration config)
         {
             _db = context;
+            _config = config;
         }
 
-        // GET api/values
+
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TimesheetEntry>>> Get()
+        public async Task<ActionResult<string>> Get()
         {
-            return await _db.Entries.ToListAsync();
+
+            var cacheConnection = _config.GetValue<string>("CacheConnection").ToString();
+            var lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
+            {
+                return ConnectionMultiplexer.Connect(cacheConnection);
+            });
+
+            IDatabase cache = lazyConnection.Value.GetDatabase();
+            var cacheItem = cache.Execute("KEYS", "LIST").ToString();
+
+            lazyConnection.Value.Dispose();
+
+            var entries = await _db.Entries.ToListAsync();
+
+            if (cacheItem == null)
+            {
+                return entries.ToString();
+            }
+            else
+            {
+                return cacheItem;
+            }
+            //Have to find out why this was commented out
+            //return await _db.Entries.ToListAsync();
         }
+
 
         // GET api/values/5
         [HttpGet("{id}")]
@@ -42,11 +70,26 @@ namespace MyTimesheet.Controllers
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public async Task Put(int id, [FromBody] TimesheetEntry value)
+        public async Task<RedisValue> Put(int id, [FromBody] TimesheetEntry value)
         {
             var entry = await _db.Entries.FindAsync(id);
             entry = value;
             await _db.SaveChangesAsync();
+
+            var cacheConnection = _config.GetValue<string>("CacheConnection").ToString();
+            var lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
+            {
+                return ConnectionMultiplexer.Connect(cacheConnection);
+            });
+
+            IDatabase cache = lazyConnection.Value.GetDatabase();
+            await cache.StringSetAsync($"{value.EntryId}", value.ToString());
+
+            var cacheItem = await cache.StringGetAsync($"{value.EntryId}");
+
+            lazyConnection.Value.Dispose();
+
+            return cacheItem;
         }
 
         // DELETE api/values/5
