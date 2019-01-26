@@ -1,27 +1,28 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using MyTimesheet.Models;
+using Newtonsoft.Json;
+using StackExchange.Redis;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using StackExchange.Redis;
-using Newtonsoft.Json;
-using Microsoft.Extensions.Configuration;
 
 namespace MyTimesheet.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TimesheetController : ControllerBase
+    public class ProjectDateTimeController : ControllerBase
     {
         private readonly TimesheetContext _db;
         private readonly IConfiguration _config;
         private Lazy<ConnectionMultiplexer> lazy;
         string cacheConnection;
 
-        public TimesheetController(TimesheetContext context, IConfiguration config)
+        public ProjectDateTimeController(TimesheetContext context, IConfiguration config)
         {
+            _db = context;
             _db = context;
             _config = config;
             cacheConnection = _config.GetValue<string>("CacheConnection").ToString();
@@ -33,23 +34,23 @@ namespace MyTimesheet.Controllers
 
         // GET api/values
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<TimesheetEntry>>> Get()
+        public async Task<ActionResult<IEnumerable<ProjectDateTime>>> Get()
         {
             try
             {
                 IDatabase cache = lazy.Value.GetDatabase();
                 var result = await cache.ExecuteAsync("KEYS", "*");
-                return JsonConvert.DeserializeObject<List<TimesheetEntry>>(result.ToString());
+                return JsonConvert.DeserializeObject<List<ProjectDateTime>>(result.ToString());
             }
             catch (Exception e)
             {
-                return await _db.Entries.ToListAsync();
+                return await _db.ProjectDateTimeEntries.ToListAsync();
             }
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TimesheetEntry>> Get(int id)
+        public async Task<ActionResult<ProjectDateTime>> Get(int id)
         {
             IDatabase cache = lazy.Value.GetDatabase();
             var result = await cache.StringGetAsync($"{id}");
@@ -57,21 +58,21 @@ namespace MyTimesheet.Controllers
 
             if (!result.HasValue)
             {
-                var value = await _db.Entries.FindAsync(id);
+                var value = await _db.ProjectDateTimeEntries.FindAsync(id);
                 await cache.StringSetAsync($"{id}", JsonConvert.SerializeObject(value));
                 return value;
             }
             else
             {
-                return JsonConvert.DeserializeObject<TimesheetEntry>(result);
+                return JsonConvert.DeserializeObject<ProjectDateTime>(result);
             }
         }
 
         // POST api/values
         [HttpPost]
-        public async Task Post([FromBody] TimesheetEntry value)
+        public async Task Post([FromBody] ProjectDateTime value)
         {
-            await _db.Entries.AddAsync(value);
+            await _db.ProjectDateTimeEntries.AddAsync(value);
             await _db.SaveChangesAsync();
 
             IDatabase cache = lazy.Value.GetDatabase();
@@ -83,12 +84,11 @@ namespace MyTimesheet.Controllers
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public async Task Put(int id, [FromBody] TimesheetEntry value)
+        public async Task Put(int id, [FromBody] ProjectDateTime value)
         {
-            var entry = await _db.Entries.FindAsync(id);
+            var entry = await _db.ProjectDateTimeEntries.FindAsync(id);
             entry = value;
             await _db.SaveChangesAsync();
-
 
             IDatabase cache = lazy.Value.GetDatabase();
             var json = JsonConvert.SerializeObject(value);
@@ -101,8 +101,8 @@ namespace MyTimesheet.Controllers
         [HttpDelete("{id}")]
         public async Task Delete(int id)
         {
-            var entry = await _db.Entries.FindAsync(id);
-            _db.Entries.Remove(entry);
+            var entry = await _db.ProjectDateTimeEntries.FindAsync(id);
+            _db.ProjectDateTimeEntries.Remove(entry);
             await _db.SaveChangesAsync();
         }
     }
