@@ -29,7 +29,9 @@ namespace MyTimesheet.Migrations
                 {
                     table.PrimaryKey("PK_Entries", x => x.Id);
                 });
+
         }
+
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {

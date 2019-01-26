@@ -6,6 +6,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
+using System.Configuration;
+using StackExchange.Redis;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Protocols;
+
 namespace MyTimesheet.Controllers
 {
     [Route("api/[controller]")]
@@ -13,9 +18,13 @@ namespace MyTimesheet.Controllers
     public class TimesheetController : ControllerBase
     {
         private readonly TimesheetContext _db;
-        public TimesheetController(TimesheetContext context)
+        readonly IConfiguration _config;
+
+        public TimesheetController(TimesheetContext context,IConfiguration config)
         {
             _db = context;
+            _config=config;
+            
         }
 
         // GET api/values
@@ -34,10 +43,30 @@ namespace MyTimesheet.Controllers
 
         // POST api/values
         [HttpPost]
-        public async Task Post([FromBody] TimesheetEntry value)
+        public async Task<string> Post([FromBody] TimesheetEntry value)
         {
+            Employee employee=new Employee();
+
             await _db.Entries.AddAsync(value);
             await _db.SaveChangesAsync();
+
+            var lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
+            {
+                string cacheConnection = _config.GetValue<string>("CacheConnection").ToString();
+                return ConnectionMultiplexer.Connect(cacheConnection);
+            });
+
+            
+
+            IDatabase cache = lazyConnection.Value.GetDatabase();
+            await cache.StringSetAsync($"{employee.Name}-{employee.Surname}", $"{employee.Name}-{employee.Surname}" );
+            var cacheitem = await cache.StringGetAsync($"{employee.Name}-{employee.Surname}");
+            lazyConnection.Value.Dispose();
+
+
+             
+            return cacheitem;
+
         }
 
         // PUT api/values/5
@@ -57,5 +86,8 @@ namespace MyTimesheet.Controllers
             _db.Entries.Remove(entry);
             await _db.SaveChangesAsync();
         }
+
+
+
     }
 }
