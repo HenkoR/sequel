@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,16 +15,28 @@ namespace MyTimesheet.Models
            John | Doe | Client X | API | 2019-01-22 | 13:00 | 17:00 | 240 | Grafting on golang api  | YES
          */
 
+
         public int Id { get; set; }
+        [ForeignKey("Developer")]
+        public int Developer_ID { get; set; }
+
+        [ForeignKey("client")]
+        public int Client_ID { get; set; }
+
+        [ForeignKey("Project")]
+        public int Project_ID { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
-        public string Client { get; set; }
-        public string Project { get; set; }
+
+        public int Duration { get; set; }
         public DateTime Date { get; set; }
         public DateTime TimeStart { get; set; }
         public DateTime TimeEnd { get; set; }
-        public int Duration { get; set; }
         public string Description { get; set; }
         public bool Billable { get; set; }
+
+
+
+
     }
 }
