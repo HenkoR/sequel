@@ -67,24 +67,24 @@ namespace MyTimesheet.Models
         public override string ToString()
         {
             string val = "";
-            val =   $"{{" +
+            val =   $"{{\n" +
                     $"\"id\": {Id},\n" +
                     $"\"employee\":{{\n" +
-                        $"\"id\": {Employee.Id},\n" +
-                        $"\"name\": \"{Employee.Name}\",\n" +
-                        $"\"surname\":\"{Employee.Surname}\"\n" +
+                        $"\t\"id\": {Employee.Id},\n" +
+                        $"\t\"name\": \"{Employee.Name}\",\n" +
+                        $"\t\"surname\":\"{Employee.Surname}\"\n" +
                     $"}},\n" +
                     $"\"project\":{{\n" +
-                        $"\"id\": {Project.Id},\n" +
-                        $"\"name\": \"{Project.Name}\",\n" +
-                        $"\"client\": {{\n" +
-                            $"\"id\": {Project.Client.Id},\n" +
-                            $"\"name\": \"{Project.Client.Name}\"\n" +
-                        $"}}\n" +
+                        $"\t\"id\": {Project.Id},\n" +
+                        $"\t\"name\": \"{Project.Name}\",\n" +
+                        $"\t\"client\": {{\n" +
+                            $"\t\t\"id\": {Project.Client.Id},\n" +
+                            $"\t\t\"name\": \"{Project.Client.Name}\"\n" +
+                        $"\t}}\n" +
                     $"}},\n" +
-                    $"\"date\": \"{Date.ToString()}\"\n" +
-                    $"\"timeStart\": \"{TimeStart.ToString()}\",\n" +
-                    $"\"timeEnd\": \"{TimeEnd.ToString()}\",\n" +
+                    $"\"date\": \"{Date}\"\n" +
+                    $"\"timeStart\": \"{TimeStart}\",\n" +
+                    $"\"timeEnd\": \"{TimeEnd}\",\n" +
                     $"\"duration\": {Duration},\n" +
                     $"\"description\": \"{Description}\",\n" +
                     $"\"billable\": {Billable}\n" +

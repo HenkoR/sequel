@@ -24,6 +24,18 @@ namespace MyTimesheet.Controllers
         }
 
         // GET api/values
+        /*[HttpGet]
+        public async Task<ActionResult<IEnumerable<TimesheetEntry>>> Get()
+        {
+            IEnumerable<TimesheetEntry> var = await _db.Entries.ToListAsync();
+            string toReturn = "[\n";
+            foreach (var item in var)
+            {
+                toReturn += item.ToString()+"\n";
+            }
+            toReturn += "]";
+            return toReturn;
+        }*/
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TimesheetEntry>>> Get()
         {
