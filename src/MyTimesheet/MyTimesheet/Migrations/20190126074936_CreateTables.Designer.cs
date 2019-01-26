@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyTimesheet.Models;
 
 namespace MyTimesheet.Migrations
 {
     [DbContext(typeof(TimesheetContext))]
-    partial class TimesheetContextModelSnapshot : ModelSnapshot
+    [Migration("20190126074936_CreateTables")]
+    partial class CreateTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -82,38 +84,30 @@ namespace MyTimesheet.Migrations
 
                     b.Property<bool>("Billable");
 
+                    b.Property<string>("Client");
+
                     b.Property<string>("Description");
 
-                    b.Property<int?>("clientId");
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Project");
+
+                    b.Property<string>("Surname");
 
                     b.Property<int?>("dateId");
 
-                    b.Property<int?>("personId");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("clientId");
-
                     b.HasIndex("dateId");
-
-                    b.HasIndex("personId");
 
                     b.ToTable("Entries");
                 });
 
             modelBuilder.Entity("MyTimesheet.Models.TimesheetEntry", b =>
                 {
-                    b.HasOne("MyTimesheet.Models.Client", "client")
-                        .WithMany()
-                        .HasForeignKey("clientId");
-
                     b.HasOne("MyTimesheet.Models.Date", "date")
                         .WithMany()
                         .HasForeignKey("dateId");
-
-                    b.HasOne("MyTimesheet.Models.Person", "person")
-                        .WithMany()
-                        .HasForeignKey("personId");
                 });
 #pragma warning restore 612, 618
         }

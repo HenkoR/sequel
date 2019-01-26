@@ -3,40 +3,23 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyTimesheet.Models;
 
 namespace MyTimesheet.Migrations
 {
     [DbContext(typeof(TimesheetContext))]
-    partial class TimesheetContextModelSnapshot : ModelSnapshot
+    [Migration("20190126073513_TestAddingTableAsField")]
+    partial class TestAddingTableAsField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "2.2.1-servicing-10028")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-            modelBuilder.Entity("MyTimesheet.Models.Client", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Project")
-                        .IsRequired()
-                        .HasMaxLength(30);
-
-                    b.Property<string>("client")
-                        .IsRequired()
-                        .HasMaxLength(30);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Client");
-                });
 
             modelBuilder.Entity("MyTimesheet.Models.Date", b =>
                 {
@@ -57,23 +40,6 @@ namespace MyTimesheet.Migrations
                     b.ToTable("Date");
                 });
 
-            modelBuilder.Entity("MyTimesheet.Models.Person", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(30);
-
-                    b.Property<string>("Surname")
-                        .HasMaxLength(30);
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Person");
-                });
-
             modelBuilder.Entity("MyTimesheet.Models.TimesheetEntry", b =>
                 {
                     b.Property<int>("Id")
@@ -82,38 +48,30 @@ namespace MyTimesheet.Migrations
 
                     b.Property<bool>("Billable");
 
+                    b.Property<string>("Client");
+
                     b.Property<string>("Description");
 
-                    b.Property<int?>("clientId");
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Project");
+
+                    b.Property<string>("Surname");
 
                     b.Property<int?>("dateId");
 
-                    b.Property<int?>("personId");
-
                     b.HasKey("Id");
 
-                    b.HasIndex("clientId");
-
                     b.HasIndex("dateId");
-
-                    b.HasIndex("personId");
 
                     b.ToTable("Entries");
                 });
 
             modelBuilder.Entity("MyTimesheet.Models.TimesheetEntry", b =>
                 {
-                    b.HasOne("MyTimesheet.Models.Client", "client")
-                        .WithMany()
-                        .HasForeignKey("clientId");
-
                     b.HasOne("MyTimesheet.Models.Date", "date")
                         .WithMany()
                         .HasForeignKey("dateId");
-
-                    b.HasOne("MyTimesheet.Models.Person", "person")
-                        .WithMany()
-                        .HasForeignKey("personId");
                 });
 #pragma warning restore 612, 618
         }

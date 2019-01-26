@@ -13,6 +13,8 @@ namespace MyTimesheet.Models
         { }
 
         public DbSet<TimesheetEntry> Entries { get; set; }
-
+        public DbSet<Date> Date { get; set; }
+        public DbSet<Person> Person { get; set; }
+        public DbSet<Client> Client { get; set; }
     }
 }
