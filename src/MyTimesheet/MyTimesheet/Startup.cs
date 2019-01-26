@@ -36,6 +36,9 @@ namespace MyTimesheet
             });
 
             var connection = @"Server=sql101labs1793591179000.westeurope.cloudapp.azure.com;Database=sql101.mpinane.mohale;User Id=mpinanemohale;Password=rabbit123!@#";
+            //Injecting a service
+            services.AddSingleton(Configuration);
+            //done
             services.AddDbContext<TimesheetContext>
                 (options => options.UseSqlServer(connection));
         }
