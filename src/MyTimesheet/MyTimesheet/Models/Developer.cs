@@ -8,7 +8,7 @@ namespace MyTimesheet.Models
     public class Developer
     {
 
-        public int DeveloperId { get; set; }
+        public string DeveloperId { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
     }

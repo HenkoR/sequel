@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,9 +15,13 @@ namespace MyTimesheet.Models
            DEV0133534     | Client X | PR05      | 2019-01-22 | 
          */
 
-        public int DeveloperId { get; set; }
+        
+        public int Id { get; set; }
+        
+        public Developer Developer { get; set; }
+        
+        public Project Project { get; set; }
         public string Client { get; set; }
-        public string ProjectId { get; set; }
         public DateTime Date { get; set; }
         
     }

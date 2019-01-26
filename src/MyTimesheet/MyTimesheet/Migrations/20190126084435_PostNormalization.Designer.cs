@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyTimesheet.Models;
 
 namespace MyTimesheet.Migrations
 {
     [DbContext(typeof(TimesheetContext))]
-    partial class TimesheetContextModelSnapshot : ModelSnapshot
+    [Migration("20190126084435_PostNormalization")]
+    partial class PostNormalization
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,8 +46,6 @@ namespace MyTimesheet.Migrations
 
                     b.Property<int>("Duration");
 
-                    b.Property<string>("Name");
-
                     b.Property<DateTime>("TimeEnd");
 
                     b.Property<DateTime>("TimeStart");
@@ -71,22 +71,7 @@ namespace MyTimesheet.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("DeveloperId");
-
-                    b.HasIndex("ProjectId");
-
                     b.ToTable("Entries");
-                });
-
-            modelBuilder.Entity("MyTimesheet.Models.TimesheetEntry", b =>
-                {
-                    b.HasOne("MyTimesheet.Models.Developer", "Developer")
-                        .WithMany()
-                        .HasForeignKey("DeveloperId");
-
-                    b.HasOne("MyTimesheet.Models.Project", "Project")
-                        .WithMany()
-                        .HasForeignKey("ProjectId");
                 });
 #pragma warning restore 612, 618
         }
