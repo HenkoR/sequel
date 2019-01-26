@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,6 +16,13 @@ namespace MyTimesheet.Models
          */
 
         public int Id { get; set; }
+
+        // creates the realtionship for a one to many therefore normalizing the database to an extent 
+
+        [ForeignKey("EmployeeEntry")]
+        public int EmployeeId { get; set; }
+
+   
         public string Name { get; set; }
         public string Surname { get; set; }
         public string Client { get; set; }
