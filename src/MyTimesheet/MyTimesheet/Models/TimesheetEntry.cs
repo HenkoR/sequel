@@ -15,8 +15,8 @@ namespace MyTimesheet.Models
          */
 
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Surname { get; set; }
+        public int EmployeeId { get; set; }
+        public Employee Employee { get; set; }
         public string Client { get; set; }
         public string Project { get; set; }
         public DateTime Date { get; set; }
