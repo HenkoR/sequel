@@ -67,7 +67,7 @@ GO
 ALTER DATABASE [sql101.simtembile.soginga] SET AUTO_UPDATE_STATISTICS_ASYNC OFF 
 GO
 
-ALTER DATABASE [sql101.simtembile.soginga] SET DATE_CORRE                                                              TION_OPTIMIZATION OFF 
+ALTER DATABASE [sql101.simtembile.soginga] SET DATE_CORRELATION_OPTIMIZATION OFF 
 GO
 
 ALTER DATABASE [sql101.simtembile.soginga] SET TRUSTWORTHY OFF 
