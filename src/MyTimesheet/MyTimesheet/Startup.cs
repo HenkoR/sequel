@@ -36,8 +36,9 @@ namespace MyTimesheet
             });
 
             var connection = @"Server=sql101labs1793591179000.westeurope.cloudapp.azure.com;Database=sql101.simtembile.soginga;User Id=simtembilesoginga;Password=Printwork31320;";
-            services.AddDbContext<TimesheetContext>
-                (options => options.UseSqlServer(connection));
+            services.AddDbContext<TimesheetContext>(options => options.UseSqlServer(connection));
+
+            services.AddSingleton(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
