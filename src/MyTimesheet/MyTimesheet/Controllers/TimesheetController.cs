@@ -27,14 +27,27 @@ namespace MyTimesheet.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TimesheetEntry>>> Get()
         {
+
             return await _db.Entries.ToListAsync();
         }
 
         // GET api/values/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<TimesheetEntry>> Get(int id)
+        public async Task<string> Get(int id)
         {
-            return await _db.Entries.FindAsync(id);
+            var cacheConnection = _config.GetValue<string>("CacheConnection").ToString();
+
+            var lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
+            {
+
+                return ConnectionMultiplexer.Connect(cacheConnection);
+            });
+
+            IDatabase cache = lazyConnection.Value.GetDatabase();
+            var cacheItem = await cache.StringGetAsync(id.ToString());
+
+
+            return cacheItem;
         }
 
         // POST api/values
@@ -44,6 +57,18 @@ namespace MyTimesheet.Controllers
             await _db.Entries.AddAsync(value);
             await _db.SaveChangesAsync();
             var cacheConnection = _config.GetValue<string>("CacheConnection").ToString();
+
+
+
+            //var lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
+            //{
+            //    string cacheConnection = ConfigurationManager.AppSettings["CacheConnection"].ToString();
+            //    return ConnectionMultiplexer.Connect(cacheConnection);
+            //});
+
+            //// Connection refers to a property that returns a ConnectionMultiplexer
+            //// as shown in the previous example.
+            //IDatabase cache = lazyConnection.Value.GetDatabase();
 
             var data = await _db.Entries.Include(v => v.Employee).Include(c => c.Project).Include(c => c.Project.Client).FirstOrDefaultAsync(x => x.Employee.Id == value.Employee.Id);
             var lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
@@ -59,7 +84,6 @@ namespace MyTimesheet.Controllers
             var cacheItem = await cache.StringGetAsync(data.Id.ToString());
 
             lazyConnection.Value.Dispose();
-
             return cacheItem.ToString(); ;
         }
 
