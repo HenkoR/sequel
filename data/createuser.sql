@@ -1,18 +1,18 @@
 USE [master]
 GO
-CREATE LOGIN [firstnamelastname] WITH PASSWORD=N'rabbit123!@#' MUST_CHANGE, DEFAULT_DATABASE=[sql101.firstname.lastname], CHECK_EXPIRATION=ON, CHECK_POLICY=ON
+CREATE LOGIN [cedricmanamela] WITH PASSWORD=N'Cedric#01' MUST_CHANGE, DEFAULT_DATABASE=[sql101.cedric.manamela], CHECK_EXPIRATION=ON, CHECK_POLICY=ON
 GO
-use [sql101.firstname.lastname]
+use [sql101.cedric.manamela]
 
 GO
 use [master]
 
 GO
-USE [sql101.firstname.lastname]
+USE [sql101.cedric.manamela]
 GO
-CREATE USER [firstnamelastname] FOR LOGIN [firstnamelastname]
+CREATE USER [cedricmanamela] FOR LOGIN [cedricmanamela]
 GO
-USE [sql101.firstname.lastname]
+USE [sql101.cedric.manamela]
 GO
-ALTER ROLE [db_owner] ADD MEMBER [firstnamelastname]
+ALTER ROLE [db_owner] ADD MEMBER [cedricmanamela]
 GO
