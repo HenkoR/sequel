@@ -64,6 +64,35 @@ namespace MyTimesheet.Models
         public int Duration { get; set; }
         public string Description { get; set; }
         public bool Billable { get; set; }
+        public override string ToString()
+        {
+            string val = "";
+            val =   $"{{" +
+                    $"\"id\": {Id},\n" +
+                    $"\"employee\":{{\n" +
+                        $"\"id\": {Employee.Id},\n" +
+                        $"\"name\": \"{Employee.Name}\",\n" +
+                        $"\"surname\":\"{Employee.Surname}\"\n" +
+                    $"}},\n" +
+                    $"\"project\":{{\n" +
+                        $"\"id\": {Project.Id},\n" +
+                        $"\"name\": \"{Project.Name}\",\n" +
+                        $"\"client\": {{\n" +
+                            $"\"id\": {Project.Client.Id},\n" +
+                            $"\"name\": \"{Project.Client.Name}\"\n" +
+                        $"}}\n" +
+                    $"}},\n" +
+                    $"\"date\": \"{Date.ToString()}\"\n" +
+                    $"\"timeStart\": \"{TimeStart.ToString()}\",\n" +
+                    $"\"timeEnd\": \"{TimeEnd.ToString()}\",\n" +
+                    $"\"duration\": {Duration},\n" +
+                    $"\"description\": \"{Description}\",\n" +
+                    $"\"billable\": {Billable}\n" +
+                $"}}";
+
+            
+            return val;
+        }
     }
   
 
