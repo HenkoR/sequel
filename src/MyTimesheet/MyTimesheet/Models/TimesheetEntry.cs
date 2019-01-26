@@ -17,13 +17,7 @@ namespace MyTimesheet.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
-        public string Client { get; set; }
-        public string Project { get; set; }
-        public DateTime Date { get; set; }
-        public DateTime TimeStart { get; set; }
-        public DateTime TimeEnd { get; set; }
-        public int Duration { get; set; }
-        public string Description { get; set; }
-        public bool Billable { get; set; }
+        public Client client { get; set; }
+        
     }
 }
