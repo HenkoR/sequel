@@ -12,7 +12,8 @@ namespace MyTimesheet.Models
             : base(options)
         { }
 
-        public DbSet<TimesheetEntry> Entries { get; set; }
-
+        //public DbSet<TimesheetEntry> Entries { get; set; }
+        public DbSet<Employee> Employees { get; set; }
+        public DbSet<Project> Projects { get; set; }
     }
 }
