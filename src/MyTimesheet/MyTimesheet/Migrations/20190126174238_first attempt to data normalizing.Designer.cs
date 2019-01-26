@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyTimesheet.Models;
 
 namespace MyTimesheet.Migrations
 {
     [DbContext(typeof(TimesheetContext))]
-    partial class TimesheetContextModelSnapshot : ModelSnapshot
+    [Migration("20190126174238_first attempt to data normalizing")]
+    partial class firstattempttodatanormalizing
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,6 +72,37 @@ namespace MyTimesheet.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("ProjectDetailsEntries");
+                });
+
+            modelBuilder.Entity("MyTimesheet.Models.TimesheetEntry", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("Billable");
+
+                    b.Property<string>("Client");
+
+                    b.Property<DateTime>("Date");
+
+                    b.Property<string>("Description");
+
+                    b.Property<int>("Duration");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Project");
+
+                    b.Property<string>("Surname");
+
+                    b.Property<DateTime>("TimeEnd");
+
+                    b.Property<DateTime>("TimeStart");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Entries");
                 });
 #pragma warning restore 612, 618
         }

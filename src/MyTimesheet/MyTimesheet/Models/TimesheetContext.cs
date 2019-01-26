@@ -13,6 +13,9 @@ namespace MyTimesheet.Models
         { }
 
         public DbSet<TimesheetEntry> Entries { get; set; }
+        public DbSet<Developer> DeveloperEntries { get; set; }
+        public DbSet<ProjectDateTime> ProjectDateTimeEntries { get; set; }
+        public DbSet<ProjectDetails> ProjectDetailsEntries { get; set; }
 
     }
 }
