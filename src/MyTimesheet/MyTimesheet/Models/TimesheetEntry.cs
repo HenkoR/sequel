@@ -14,16 +14,47 @@ namespace MyTimesheet.Models
            John | Doe | Client X | API | 2019-01-22 | 13:00 | 17:00 | 240 | Grafting on golang api  | YES
          */
 
+
+        /*
+           | Name | Surname  | Dev_ID   | Description
+           | ---  | ---------| -------- | ----------                       Developer
+           | John | Doe      | 1        | I was rocking HTML5 
+           | John | Doe      | 2        | Grafting on golang api 
+
+           | Client_ID | Name      |
+           | --------  | ------    |
+           | John      | Client X  |                                       Client
+           | John      | Client X  |
+
+
+           | Project  | Billable    | Client_ID |
+           | -------- | ----------- | --------  |
+           | Client X | YES         | 001       |                          Project
+           | Client X | YES         | 002       |
+
+
+           | Client_ID   | Project_ID | Date       | Time Started | Time ended | Duration |
+           | ---         | ---        | ---------  | ------------ | ---------- | -------- |                ProjectDate
+           | 001         | Website    | 2019-01-22 | 09:00        | 11:00      | 120      |
+           | 002         | API        | 2019-01-22 | 13:00        | 17:00      | 240      |
+
+        Lindani R Mabaso
+        */
+
+
+
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Surname { get; set; }
-        public string Client { get; set; }
-        public string Project { get; set; }
-        public DateTime Date { get; set; }
-        public DateTime TimeStart { get; set; }
-        public DateTime TimeEnd { get; set; }
-        public int Duration { get; set; }
-        public string Description { get; set; }
-        public bool Billable { get; set; }
+         public string Name { get; set; }
+         public string Surname { get; set; }
+         public string Client { get; set; }
+         public string Project { get; set; }
+         public DateTime Date { get; set; }
+         public DateTime TimeStart { get; set; }
+         public DateTime TimeEnd { get; set; }
+         public int Duration { get; set; }
+         public string Description { get; set; }
+         public bool Billable { get; set; }
+     
     }
 }
+ 
