@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyTimesheet.Models;
 
 namespace MyTimesheet.Migrations
 {
     [DbContext(typeof(TimesheetContext))]
-    partial class TimesheetContextModelSnapshot : ModelSnapshot
+    [Migration("20190126121157_TestPersonId")]
+    partial class TestPersonId
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -86,9 +88,7 @@ namespace MyTimesheet.Migrations
 
                     b.Property<int?>("clientId");
 
-                    b.Property<int>("clientIid");
-
-                    b.Property<int>("dateId");
+                    b.Property<int?>("dateId");
 
                     b.Property<int>("personId");
 
@@ -111,8 +111,7 @@ namespace MyTimesheet.Migrations
 
                     b.HasOne("MyTimesheet.Models.Date", "date")
                         .WithMany()
-                        .HasForeignKey("dateId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("dateId");
 
                     b.HasOne("MyTimesheet.Models.Person", "person")
                         .WithMany()

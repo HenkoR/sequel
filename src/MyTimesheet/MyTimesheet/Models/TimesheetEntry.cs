@@ -15,6 +15,9 @@ namespace MyTimesheet.Models
          */
 
         public int Id { get; set; }
+        public int personId { get; set; }
+        public int dateId { get; set; }
+        public int clientIid { get; set; }
         public Person person { get; set; }
         public Client client { get; set; }
         public Date date { get; set; }
